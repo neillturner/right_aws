@@ -357,7 +357,9 @@ module RightAws
       request_hash.merge!(amazonize_list('SecurityGroups.member',      options[:security_groups]))       unless options[:security_groups].right_blank?
       request_hash.merge!(amazonize_block_device_mappings(options[:block_device_mappings], 'BlockDeviceMappings.member'))
       request_hash['KeyName']   = options[:key_name]   if options[:key_name]
-      request_hash['UserData']  = Base64.encode64(options[:user_data]).delete("\n") unless options[:user_data].right_blank? if options[:user_data]
+      # base64 encoding of userdata does not seem to work so taking out.
+      #request_hash['UserData']  = Base64.encode64(options[:user_data]).delete("\n") unless options[:user_data].right_blank? if options[:user_data]
+      request_hash['UserData']  = options[:user_data] if options[:user_data]
       request_hash['KernelId']  = options[:kernel_id]  if options[:kernel_id]
       request_hash['RamdiskId'] = options[:ramdisk_id] if options[:ramdisk_id]
       link = generate_request("CreateLaunchConfiguration", request_hash)
